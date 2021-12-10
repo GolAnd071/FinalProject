@@ -80,8 +80,6 @@ def detect_water(mode, in_filename, out_filename, product_type):
                                                               pekel=args.pekel,
                                                               single_mode=args.single)
 
-    return
-
 
 def debug(args):
     print(f'Working directory: {os.getcwd()}')
