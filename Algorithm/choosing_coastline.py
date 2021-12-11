@@ -28,11 +28,11 @@ class Coastline:
     def get_next_coords(self):
         next_neighbor_area = self.get_next_neighborhood_area()
         previos_coords = self.get_previos_coords()
-        current_coords = self.get_current_coords()
+        x,y = current_coords = self.get_current_coords()
         for i in range(3):
             for j in range(3):
                 if (i, j) not in (previos_coords, current_coords) and next_neighbor_area[i, j] == 0 and checking_if_border(i, j):
-                    return i, j
+                    return y+i, x+j
 
 coastline = Coastline()
 
