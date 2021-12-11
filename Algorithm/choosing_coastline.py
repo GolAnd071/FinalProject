@@ -1,4 +1,4 @@
-start_coords = 0,0
+# TODO: load pix massive from another module
 
 def checking_if_border(neighbor_area):
     coords = [(0,1), (0,1), (2, 1), (1, 2)] # neighbor pixels in area
@@ -19,6 +19,7 @@ class Coastline:
         return self.coords[-1]
 
     def get_next_neighborhood_area(self, pix):
+        # TODO: checking if next_neighborhood_area go beyond the pix
         y, x = self.get_current_coords()
         neighborhood_area = [[pix[y + 1, x - 1], pix[y + 1, x], pix[y + 1, x + 1]],
                              [pix[y, x - 1], pix[y, x], pix[y, x + 1]],
@@ -26,6 +27,7 @@ class Coastline:
         return neighborhood_area
 
     def get_next_coords(self):
+        # TODO: checking if next_coords go beyond the pix
         next_neighbor_area = self.get_next_neighborhood_area()
         previos_coords = self.get_previos_coords()
         x,y = current_coords = self.get_current_coords()
@@ -34,11 +36,16 @@ class Coastline:
                 if (i, j) not in (previos_coords, current_coords) and next_neighbor_area[i, j] == 0 and checking_if_border(i, j):
                     return y+i, x+j
 
+    #TODO: add function choose_first_coords or choose_first_point
+
 coastline = Coastline()
 
-def make_mask_with_coastline(color):
-    for i in range(pix_size):
-        for
-pix = [[0, 1, 0, 0, 1],
-       [0, 1, 1, 0, 0
-       []]
+# TODO: get all coastline.coords using cycle
+
+# TODO: add function make_mask_with_coastline
+# def make_mask_with_coastline(color):
+#     for i in range(pix_size):
+#         for
+# pix = [[0, 1, 0, 0, 1],
+#        [0, 1, 1, 0, 0
+#        []]
