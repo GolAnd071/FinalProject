@@ -2,11 +2,13 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.filedialog import *
 from WaterDetection import *
+import matplotlib.pyplot as plt
 
 mode = None
 in_filename = None
 out_filename = None
 product_type = None
+img = None
 
 
 def open_input_file_dialog():
@@ -28,8 +30,11 @@ def detect_water_start():
     global in_filename
     global out_filename
     global product_type
+    global img
 
-    detect_water(mode.get(), in_filename.get(), out_filename.get(), product_type.get())
+    wd = detect_water(mode.get(), in_filename.get(), out_filename.get(), product_type.get())
+    # wd.water_mask - массив
+    print(wd.water_mask)
 
 
 def main():
@@ -37,10 +42,10 @@ def main():
     global in_filename
     global out_filename
     global product_type
+    global img
 
     root = Tk()
-    # img = Canvas(root, width=800, height=600, bg="black")
-    # img.pack(side=TOP)
+    img = Canvas(root, width=800, height=600, bg="black")
     frm = ttk.Frame(root, padding=10)
     frm.grid()
 
