@@ -1,7 +1,9 @@
 # TODO: load pix massive from another module
+import numpy as np
 
-def checking_if_border(neighbor_area):
-    coords = [(0,1), (0,1), (2, 1), (1, 2)] # neighbor pixels in area
+def checking_if_border(neighbor_area: np.array):
+    ```Cheking if there are water bordering pixels in area```
+    coords = [(0,1), (0,1), (2, 1), (1, 2)]
     for c in coords:
         if neighbor_area[c] == 1: #cheking if pixel is water pixel
             return True
@@ -12,13 +14,13 @@ class Coastline:
     def __init__(self):
         self.coords = []
 
-    def get_previos_coords(self):
+    def get_previos_coords(self) -> tuple:
         return self.coords[-2]
 
-    def get_current_coords(self):
+    def get_current_coords(self) -> tuple:
         return self.coords[-1]
 
-    def get_next_neighborhood_area(self, pix):
+    def get_next_neighborhood_area(self, pix: np.array) -> np.array:
         # TODO: checking if next_neighborhood_area go beyond the pix
         y, x = self.get_current_coords()
         neighborhood_area = [[pix[y + 1, x - 1], pix[y + 1, x], pix[y + 1, x + 1]],
@@ -26,7 +28,7 @@ class Coastline:
                              [pix[y - 1, x - 1], pix[y - 1, x], pix[y + 1, x + 1]]]
         return neighborhood_area
 
-    def get_next_coords(self):
+    def get_next_coords(self) -> tuple:
         # TODO: checking if next_coords go beyond the pix
         next_neighbor_area = self.get_next_neighborhood_area()
         previos_coords = self.get_previos_coords()
