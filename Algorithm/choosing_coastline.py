@@ -14,12 +14,6 @@ class Coastline:
     def __init__(self):
         self.coords = []
 
-    def get_previos_coords(self) -> tuple:
-        return self.coords[-2]
-
-    def get_current_coords(self) -> tuple:
-        return self.coords[-1]
-
     def get_next_neighborhood_area(self, pix: np.array) -> np.array:
         # TODO: checking if next_neighborhood_area go beyond the pix
         y, x = self.get_current_coords()
@@ -30,12 +24,10 @@ class Coastline:
 
     def get_next_coords(self) -> tuple:
         # TODO: checking if next_coords go beyond the pix
-        next_neighbor_area = self.get_next_neighborhood_area()
-        previos_coords = self.get_previos_coords()
-        x,y = current_coords = self.get_current_coords()
+        x,y = self.coords[-1]
         for i in range(3):
             for j in range(3):
-                if (i, j) not in (previos_coords, current_coords) and next_neighbor_area[i, j] == 0 and checking_if_border(i, j):
+                if (i, j) not in (self.coords[-2], self.coords[-1]) and next_neighbor_area[i, j] == 0 and checking_if_border(i, j):
                     return y+i, x+j
 
     #TODO: add function choose_first_coords or choose_first_point
