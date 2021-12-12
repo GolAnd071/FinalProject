@@ -16,7 +16,7 @@ class Coastline:
 
     def get_next_neighborhood_area(self, pix: np.array) -> np.array:
         # TODO: checking if next_neighborhood_area go beyond the pix
-        y, x = self.get_current_coords()
+        y, x = self.coords[-1]
         neighborhood_area = [[pix[y + 1, x - 1], pix[y + 1, x], pix[y + 1, x + 1]],
                              [pix[y, x - 1], pix[y, x], pix[y, x + 1]],
                              [pix[y - 1, x - 1], pix[y - 1, x], pix[y + 1, x + 1]]]
