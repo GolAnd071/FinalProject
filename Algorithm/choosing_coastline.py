@@ -1,9 +1,9 @@
-# TODO: load pix massive from another module
+# TODO: load pix massive from another module # We don't need to load it, we will create an object of this class in module, where pix massive is - GolAnd071
 import numpy as np
 
 def checking_if_border(neighbor_area: np.array):
-    ```Cheking if there are water bordering pixels in area```
-    coords = [(0,1), (0,1), (2, 1), (1, 2)]
+    '''Cheking if there are water bordering pixels in area'''
+    coords = [(0,1), (0,1), (2, 1), (1, 2)] # [(0, 1), (1, 0), (1, 2), (2, 1)] - GolAnd071
     for c in coords:
         if neighbor_area[c] == 1: #cheking if pixel is water pixel
             return True
