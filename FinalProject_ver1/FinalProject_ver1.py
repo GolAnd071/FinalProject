@@ -47,6 +47,7 @@ def detect_water_start():
     wd_ = np.array([[wd.water_mask[i][j] * 255 for j in range(10980)] for i in range(10980)], dtype=np.uint8)
     img_ = Image.fromarray(wd_)
     img_ = img_.resize((600, 600))
+    img_.save("image_compressed.png")
     imgTk_ = ImageTk.PhotoImage(img_)
     img.create_image(image=imgTk_)
     img.grid(column=0, row=0)
