@@ -3,9 +3,9 @@
 
 def check_if_border(neighbor_area):
     '''Cheking if there are water bordering pixels in area'''
-    coords = [(0, 1), (1, 0), (1, 2), (2, 1)]
+    coords = [[0, 1], [1, 0], [1, 2], [2, 1]]
     for c in coords:
-        if neighbor_area[c] == 1:  # cheking if pixel is water pixel
+        if neighbor_area[c[0]][c[1]] == 1:  # cheking if pixel is water pixel
             return True
     return False
 
@@ -28,9 +28,9 @@ class Coastline:
     def get_next_neighborhood_area(self, center: tuple):
         data = self.data
         y, x = center
-        neighborhood_area = [[data[y + 1, x - 1], data[y + 1, x], data[y + 1, x + 1]],
-                             [data[y, x - 1], data[y, x], data[y, x + 1]],
-                             [data[y - 1, x - 1], data[y - 1, x], data[y + 1, x + 1]]]
+        neighborhood_area = [[data[y + 1][x - 1], data[y + 1][x], data[y + 1][x + 1]],
+                             [data[y][x - 1], data[y][x], data[y][x + 1]],
+                             [data[y - 1][x - 1], data[y - 1][x], data[y + 1][x + 1]]]
         return neighborhood_area
 
     def get_new_coords(self) -> tuple:
@@ -38,8 +38,10 @@ class Coastline:
         next_neighbor_area = self.get_next_neighborhood_area(center=(y, x))
         for i in range(3):
             for j in range(3):
-                if (i, j) not in (self.coords[-2], self.coords[-1]) and next_neighbor_area[
-                    i, j] == 0 and check_if_border(i, j):
+                if (i, j) not in (self.coords[-1][0],
+                                  self.coords[-1][1]) and \
+                        next_neighbor_area[i][j] == 0 and \
+                        check_if_border(next_neighbor_area):
                     return y + i, x + j
 
     def create_line(self):
