@@ -50,32 +50,25 @@ coastline = Coastline()
 
 
 class BrokenLine:
-    def __init__(self, step, start_point, cords):
+    def __init__(self, step, cords):
         self.step = step
-        self.start_point = start_point
+        self.start_point = cords[0]
         self.vertices = [self.start_point]
         self.cords = cords
 
     def create_line(self):
         """
         Creates a list of coordinates of vertices of broken line of coastline
-        @param cords: list of coastline coordinates
         """
-        def add_new_cord(line: BrokenLine):
-            epsilon = 1000000
-            end_cord = [0, 0]
-            for c in self.cords:
-                d = ((line.vertices[-1][0] - c[0]) ** 2 + (line.vertices[-1][1] - c[1]) ** 2) ** 0.5
-                delta = int(d) - line.step
-                if epsilon ** 2 > delta ** 2 and line.vertices[-2] != [c[0], c[1]]:
-                    epsilon = delta
-                    end_cord = [c[0], c[1]]
-            line.vertices.append(end_cord)
-
-        for _ in range(2):
-            add_new_cord(self)
-        while ((self.vertices[-1][0] - self.start_point[0]) ** 2 + (self.vertices[-1][1] - self.start_point[1]) ** 2) >= self.step ** 2:
-            add_new_cord(self)
+        cur = self.start_point
+        for i in range(len(self.cords)):
+            dists = [((cur[0] - self.cords[i][0] - 0.5) ** 2 + (cur[0] - self.cords[i][0] - 0.5) ** 2) ** 0.5,
+                     ((cur[0] - self.cords[i][0] - 0.5) ** 2 + (cur[0] - self.cords[i][0] + 0.5) ** 2) ** 0.5,
+                     ((cur[0] - self.cords[i][0] + 0.5) ** 2 + (cur[0] - self.cords[i][0] - 0.5) ** 2) ** 0.5,
+                     ((cur[0] - self.cords[i][0] + 0.5) ** 2 + (cur[0] - self.cords[i][0] + 0.5) ** 2) ** 0.5]
+            if min(dists) <= self.step <= max(dists):
+                self.vertices.append(self.cords[i])
+                cur = self.cords[i]
 
     def get_length(self):
         """
