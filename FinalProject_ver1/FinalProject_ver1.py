@@ -1,91 +1,67 @@
-from tkinter import *
+import tkinter as tk
 from tkinter import ttk
-from tkinter.filedialog import *
-from random import *
-from WaterDetection import *
+from tkinter.filedialog import askdirectory
+
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-from PIL import Image, ImageTk
-import numpy as np
 
-mode = None
-in_filename = None
-out_filename = None
-product_type = None
-img = None
-inLabel = None
-outLabel = None
+import waterdetect
 
+class Main():
+    def __init__(self):
+        self.root = tk.Tk()
+        print('Message: Window created.')
+        self.frame = ttk.Frame(self.root, padding=10)
+        self.frame.grid()
 
-def open_input_file_dialog():
-    global in_filename
-    global inLabel
+        self.water_map = None
+        self.fig = None
 
-    in_filename = StringVar()
-    in_filename.set(askdirectory())
-    inLabel['text'] = in_filename.get()
+        self.mode = tk.StringVar()
+        self.in_dir = tk.StringVar()
+        self.out_dir = tk.StringVar()
+        self.prod_type = tk.StringVar()
 
+        ttk.Combobox(self.frame, textvariable=self.mode, values=['Batch', 'Single']).grid(column=0, row=2)
 
-def open_output_file_dialog():
-    global out_filename
-    global outLabel
+        ttk.Label(self.frame, textvariable=self.in_dir, width=16).grid(column=1, row=2)
+        ttk.Button(self.frame, text='Choose input directory', command=lambda:self.in_dir.set(askdirectory())).grid(column=2, row=2)
 
-    out_filename = StringVar()
-    out_filename.set(askdirectory())
-    outLabel['text'] = out_filename.get()
+        ttk.Label(self.frame, textvariable=self.out_dir, width=16).grid(column=3, row=2)
+        ttk.Button(self.frame, text='Choose output directory', command=lambda:self.out_dir.set(askdirectory())).grid(column=4, row=2)
 
+        ttk.Combobox(self.frame, textvariable=self.prod_type, values=['S2_THEIA', 'L8_USGS', 'S2_L1C', 'S2_S2COR']).grid(column=5, row=2)
 
-def detect_water_start():
-    global mode
-    global in_filename
-    global out_filename
-    global product_type
-    global img
+        ttk.Button(self.frame, text='Detect water', command=lambda:self.detect_water()).grid(column=6, row=2)
 
-    wd = detect_water(mode.get(), in_filename.get(), out_filename.get(), product_type.get())
-    # wd.water_mask - massive
-    print("Detection has been ended.\n")
-    wd_ = np.array([[wd.water_mask[i][j] * 255 for j in range(10980)] for i in range(10980)], dtype=np.uint8)
-    img_ = Image.fromarray(wd_)
-    img_ = img_.resize((600, 600))
-    img_.save("image_compressed.png")
-    imgTk_ = ImageTk.PhotoImage(img_)
-    img.create_image(image=imgTk_)
-    img.grid(column=0, row=0)
-    print("Image has been shown.\n")
+        ttk.Button(self.frame, text='Show image', command=lambda:self.render_image(self.water_map.water_mask)).grid(column=6, row=3)
+
+        self.root.mainloop()
 
 
-def main():
-    global mode
-    global in_filename
-    global out_filename
-    global product_type
-    global img
-    global inLabel
-    global outLabel
-
-    root = Tk()
-    img = Canvas(root, width=600, height=600, bg="black")
-    img.grid(column=0, row=0)
-    frm = ttk.Frame(root, padding=10)
-    frm.grid()
-
-    mode = StringVar()
-    in_filename = StringVar()
-    out_filename = StringVar()
-    product_type = StringVar()
-    ttk.Combobox(frm, textvariable=mode, values=["Batch", "Single"]).grid(column=0, row=1)
-    inLabel = ttk.Label(frm, text='...', width=32)
-    inLabel.grid(column=1, row=1)
-    ttk.Button(frm, text="Choose input directory", command=open_input_file_dialog).grid(column=2, row=1)
-    outLabel = ttk.Label(frm, text='...', width=32)
-    outLabel.grid(column=3, row=1)
-    ttk.Button(frm, text="Choose output directory", command=open_output_file_dialog).grid(column=4, row=1)
-    ttk.Combobox(frm, textvariable=product_type, values=["S2_THEIA", "L8_USGS", "S2_L1C", "S2_S2COR"]).grid(column=5, row=1)
-    ttk.Button(frm, text="Detect water", command=detect_water_start).grid(column=6, row=1)
-
-    root.mainloop()
-    print(mode.get(), in_filename.get(), out_filename.get(), product_type.get())
+    def detect_water(self):
+        if (self.mode == '') or (self.in_dir == '') or (self.out_dir == '') or (self.prod_type == ''):
+            print('Error: Arguments for water detection are invalid.')
+        else:
+            print('Message: Water detection started.')
+            self.water_map = waterdetect.DWWaterDetect.run_water_detect(input_folder=self.in_dir.get(), output_folder=self.out_dir.get(), product=self.prod_type.get(), single_mode=True if self.mode.get() == 'Single' else False)
+            print('Message: Water detection ended.')
 
 
-if __name__ == "__main__":
-    main()
+    def render_image(self, matrix):
+        print('Message: Rendering started.')
+        self.fig = Figure(figsize=(0.05, 0.05), dpi=10980)
+        self.fig.figimage(matrix)
+        self.canvas = FigureCanvasTkAgg(self.fig, self.frame)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().grid(column=0, row=0, columnspan=7)
+        self.toolbar = NavigationToolbar2Tk(self.canvas, self.frame, pack_toolbar=False)
+        self.toolbar.update()
+        self.toolbar.grid(column=0, row=1, columnspan=7)
+        print('Message: Rendering ended.')
+
+
+app = Main()
