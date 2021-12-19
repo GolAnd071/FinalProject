@@ -34,7 +34,7 @@ class Coastline:
 
     def check_if_came_back(self, new_coord):
         if len(self.coords) <= 1:
-            if new_coord == self.coords[-1]:
+            if new_coord == self.start_point:
                 return True
             else:
                 return False
