@@ -68,41 +68,29 @@ class Coastline:
 
 
 class BrokenLine:
-    step = 0
-    start_point = []
-    cords = []
-
-    def __init__(self, step, start_point, cords):
+    def __init__(self, step, cords):
         self.step = step
-        self.start_point = start_point
+        self.start_point = cords[0]
+        self.vertices = [self.start_point]
         self.cords = cords
 
-    def create_line(self, cords):
+    def create_line(self):
         """
         Creates a list of coordinates of vertices of broken line of coastline
         @param cords: list of coastline coordinates
         """
-        def add_new_cord(line: BrokenLine, previous_cord, start_cord, coords):
-            epsilon = 1000000
-            end_cord = [0, 0]
-            for c in coords:
-                d = ((start_cord[0] - c[0]) ** 2 + (start_cord[1] - c[1]) ** 2) ** 0.5
-                delta = int(d) - line.step
-                if epsilon ** 2 > delta ** 2 and previous_cord != [c[0], c[1]]:
-                    epsilon = delta
-                    end_cord = [c[0], c[1]]
-            line.cords.append(end_cord)
-            return start_cord, end_cord
-
-        prev = self.start_point
-        curr = self.start_point
-        for _ in range(2):
-            prev, curr = add_new_cord(self, prev, curr, cords)
-        while ((curr[0] - self.start_point[0]) ** 2 + (curr[1] - self.start_point[1]) ** 2) >= self.step ** 2:
-            prev, curr = add_new_cord(self, prev, curr, cords)
+        cur = self.start_point
+        for i in range(len(self.cords)):
+            dists = [((cur[0] - self.cords[i][0] - 0.5) ** 2 + (cur[0] - self.cords[i][0] - 0.5) ** 2) ** 0.5,
+                     ((cur[0] - self.cords[i][0] - 0.5) ** 2 + (cur[0] - self.cords[i][0] + 0.5) ** 2) ** 0.5,
+                     ((cur[0] - self.cords[i][0] + 0.5) ** 2 + (cur[0] - self.cords[i][0] - 0.5) ** 2) ** 0.5,
+                     ((cur[0] - self.cords[i][0] + 0.5) ** 2 + (cur[0] - self.cords[i][0] + 0.5) ** 2) ** 0.5]
+            if min(dists) <= self.step <= max(dists):
+                self.vertices.append(self.cords[i])
+                cur = self.cords[i]
 
     def get_length(self):
         """
         Returns length of broken line
         """
-        return self.step * len(self.cords)
+        return self.step * len(self.vertices)

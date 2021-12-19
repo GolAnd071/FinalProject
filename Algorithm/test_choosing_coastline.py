@@ -60,13 +60,3 @@ class Test_choosing_coastline(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-# def main():
-#    cstln = [(0, 5), (1, 4), (2, 4), (3, 3), (4, 2), (4, 1), (5, 2), (5, 3), (6, 4), (7, 4)]
-#    line = BrokenLine(int(input()), cstln)
-#    line.create_line()
-#    print(line.vertices)
-
-
-# if __name__ == '__main__':
-#    main()
