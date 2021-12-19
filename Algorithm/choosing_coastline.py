@@ -11,6 +11,7 @@ class Coastline:
     counterclockwise_bypass = [(1, 0), (0, 1), (-1, 0), (0, -1)]
     clockwise_bypass = [(0, 1), (1, 0), (0, -1), (-1, 0)]
     bypasses = counterclockwise_bypass, clockwise_bypass
+
     # TODO: check if algo depends on bypass direction (shifts order)
     # TODO: replace tuples array by numpy array
 
@@ -61,10 +62,9 @@ class Coastline:
         while self.get_new_coords(bypass=self.bypasses[0]) != self.start_point:
             self.coords += [self.get_new_coords(bypass=self.bypasses[0])]
         self.coords.reverse()
-        
+
         while self.get_new_coords(bypass=self.bypasses[1]) != self.start_point:
             self.coords += [self.get_new_coords(bypass=self.bypasses[1])]
-
 
 
 class BrokenLine:
@@ -73,24 +73,41 @@ class BrokenLine:
         self.start_point = cords[0]
         self.vertices = [self.start_point]
         self.cords = cords
+        self.line_created = False
+        self.island = False
 
     def create_line(self):
         """
         Creates a list of coordinates of vertices of broken line of coastline
-        @param cords: list of coastline coordinates
         """
+
+        def get_dists_range(fist_point, second_point):
+            dists = [(fist_point[0] - second_point[0] - 0.5) ** 2 + (fist_point[1] - second_point[1] - 0.5) ** 2,
+                     (fist_point[0] - second_point[0] - 0.5) ** 2 + (fist_point[1] - second_point[1] + 0.5) ** 2,
+                     (fist_point[0] - second_point[0] + 0.5) ** 2 + (fist_point[1] - second_point[1] - 0.5) ** 2,
+                     (fist_point[0] - second_point[0] + 0.5) ** 2 + (fist_point[1] - second_point[1] + 0.5) ** 2]
+            return min(dists), max(dists)
+
+        def is_step_in_dist_range(first_point, second_point):
+            min_dist, max_dist = get_dists_range(first_point, second_point)
+            return min_dist <= self.step ** 2 <= max_dist
+
         cur = self.start_point
         for i in range(len(self.cords)):
-            dists = [((cur[0] - self.cords[i][0] - 0.5) ** 2 + (cur[0] - self.cords[i][0] - 0.5) ** 2) ** 0.5,
-                     ((cur[0] - self.cords[i][0] - 0.5) ** 2 + (cur[0] - self.cords[i][0] + 0.5) ** 2) ** 0.5,
-                     ((cur[0] - self.cords[i][0] + 0.5) ** 2 + (cur[0] - self.cords[i][0] - 0.5) ** 2) ** 0.5,
-                     ((cur[0] - self.cords[i][0] + 0.5) ** 2 + (cur[0] - self.cords[i][0] + 0.5) ** 2) ** 0.5]
-            if min(dists) <= self.step <= max(dists):
+            if is_step_in_dist_range(cur, self.cords[i]):
                 self.vertices.append(self.cords[i])
                 cur = self.cords[i]
+        if is_step_in_dist_range(self.cords[0], self.cords[-1]):
+            self.island = True
+        self.line_created = True
 
     def get_length(self):
         """
         Returns length of broken line
         """
-        return self.step * len(self.vertices)
+        if self.line_created:
+            if self.island:
+                return self.step * len(self.vertices)
+            else:
+                return self.step * (len(self.vertices) - 1)
+        return 0

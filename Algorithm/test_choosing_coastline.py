@@ -13,7 +13,8 @@ class Test_choosing_coastline(unittest.TestCase):
                     r.append(randint(0, 1))
                 arr.append(r)
             arr[0][0] = 0
-            print(arr)
+            for i in range(n):
+                print(arr[i])
             return arr
 
         self.maps = []
@@ -25,11 +26,17 @@ class Test_choosing_coastline(unittest.TestCase):
             print(i, ' Coastline created\n')
             print(i, ' Coastline line started crating')
             cstln.create_line()
-            print(f'cstln.coords:{cstln.coords}')
+            print('Coastline cords: ', cstln.coords)
             print(i, ' Coastline line created\n')
             print(i, ' BrokenLine started crating')
             brln = cc.BrokenLine(randint(1, 3), cstln.coords)
             print(i, ' BrokenLine created\n')
+            print(i, ' BrokenLine line started creating')
+            brln.create_line()
+            print('BrokenLine vertices: ', brln.vertices)
+            print(i, ' BrokenLine line created')
+            print(i, ' BrokenLine step: ', brln.step)
+            print(i, ' BrokenLine lenght: ', brln.get_length(), '\n')
             print(i + 1, ' Coastline started crating')
             self.coastlines.append(cstln)
             self.brokenlines.append(brln)
@@ -39,23 +46,20 @@ class Test_choosing_coastline(unittest.TestCase):
             print(i + 20, ' Coastline created\n')
             print(i + 20, ' Coastline line started crating')
             cstln.create_line()
+            print('Coastline cords: ', cstln.coords)
             print(i + 20, ' Coastline line created\n')
             print(i + 20, ' BrokenLine started crating')
             brln = cc.BrokenLine(randint(1, 10), cstln.coords)
             print(i + 20, ' BrokenLine created\n')
+            print(i + 20, ' BrokenLine line started creating')
+            brln.create_line()
+            print('BrokenLine vertices: ', brln.vertices)
+            print(i + 20, ' BrokenLine line created')
+            print(i + 20, ' BrokenLine step: ', brln.step)
+            print(i + 20, ' BrokenLine lenght: ', brln.get_length(), '\n')
             print(i + 21, ' Coastline started crating')
             self.coastlines.append(cstln)
             self.brokenlines.append(brln)
-
-    def test_create_line(self):
-        for i in range(len(self.brokenlines)):
-            self.brokenlines[i].create_line()
-            print(i, ' BrokenLine line created\n')
-
-    def test_get_lenght(self):
-        for i in range(len(self.brokenlines)):
-            self.brokenlines[i].get_length()
-            print(i, ' BrokenLine lenght had got\n')
 
 
 if __name__ == '__main__':
