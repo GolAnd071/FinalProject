@@ -51,7 +51,6 @@ class Coastline:
                 if not self.check_if_came_back(new_coord) and \
                         self.data[y + i][x + j] == 0 and \
                         self.check_if_point_is_border(coord=new_coord):
-                    # print(f'new_coord: {new_coord}')
                     return new_coord
         return self.start_point
 
@@ -59,20 +58,13 @@ class Coastline:
         """
         Creates a list of coordinates of coastline
         """
-
-        print(f'I am on 65 line: self.coords {self.coords}')
-        i=1
         while self.get_new_coords(bypass=self.bypasses[0]) != self.start_point:
             self.coords += [self.get_new_coords(bypass=self.bypasses[0])]
-            # print(f'Number of itter: {i}, прибавляем координаты: {self.coords[-1]}, bp: против час')
-            i+=1
-        # self.coords += [self.get_new_coords(bypass=self.bypasses[1])]
         self.coords.reverse()
-        print(f'I am on 72 line: self.coords {self.coords}')
+        
         while self.get_new_coords(bypass=self.bypasses[1]) != self.start_point:
             self.coords += [self.get_new_coords(bypass=self.bypasses[1])]
-            # print(f'Number of itter: {i}, последняя координата: {self.coords[-1]},  bp: по час')
-            i += 1
+
 
 
 class BrokenLine:
