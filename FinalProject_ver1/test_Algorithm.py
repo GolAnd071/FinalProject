@@ -3,7 +3,7 @@ from random import randint
 import Algorithm as cc
 
 
-class Test_algorithm(unittest.TestCase):
+class AlgorithmTests(unittest.TestCase):
     def setUp(self):
         def make_array(n):
             arr = []
@@ -58,6 +58,9 @@ class Test_algorithm(unittest.TestCase):
             print(i + 21, ' Coastline started crating')
             self.coastlines.append(cstln)
             self.brokenlines.append(brln)
+
+    def test_pass(self):
+        pass
 
 
 if __name__ == '__main__':
