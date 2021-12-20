@@ -1,5 +1,5 @@
 def check_if_go_out_of_array(coords, array_size):
-    '''Cheking if we've reached array frames'''
+    ''' Cheking if we've reached array frames '''
 
     for c in coords:
         if c > array_size - 1 or c < 0:
@@ -22,14 +22,14 @@ class Coastline:
         self.data_size = data_size
 
     def check_if_point_is_border(self, coord: tuple):
-        '''Cheking if there are water bordering pixels in area'''
+        ''' Cheking if there are water bordering pixels in area '''
         data = self.data
         y, x = coord
         for i in range(-1, 2):
             for j in range(-1, 2):
                 neighbor_coord = y + i, x + j
                 if not check_if_go_out_of_array(neighbor_coord, self.data_size) and neighbor_coord != coord:
-                    if data[y + i][x + j] == 1:
+                    if abs(data[y + i][x + j]) == 1:
                         return True
         return False
 
@@ -39,7 +39,7 @@ class Coastline:
                 return True
             else:
                 return False
-        elif new_coord in (self.coords[-2], self.coords[-1]):
+        elif new_coord in self.coords:
             return True
         else:
             return False
@@ -56,9 +56,7 @@ class Coastline:
         return self.start_point
 
     def create_line(self):
-        """
-        Creates a list of coordinates of coastline
-        """
+        ''' Creates a list of coordinates of coastline '''
         while self.get_new_coords(bypass=self.bypasses[0]) != self.start_point:
             self.coords += [self.get_new_coords(bypass=self.bypasses[0])]
         self.coords.reverse()
@@ -77,10 +75,7 @@ class BrokenLine:
         self.island = False
 
     def create_line(self):
-        """
-        Creates a list of coordinates of vertices of broken line of coastline
-        """
-
+        ''' Creates a list of coordinates of vertices of broken line of coastline '''
         def get_dists_range(fist_point, second_point):
             dists = [(fist_point[0] - second_point[0] - 0.5) ** 2 + (fist_point[1] - second_point[1] - 0.5) ** 2,
                      (fist_point[0] - second_point[0] - 0.5) ** 2 + (fist_point[1] - second_point[1] + 0.5) ** 2,
@@ -102,9 +97,7 @@ class BrokenLine:
         self.line_created = True
 
     def get_length(self):
-        """
-        Returns length of broken line
-        """
+        ''' Returns length of broken line '''
         if self.line_created:
             if self.island:
                 return self.step * len(self.vertices)
