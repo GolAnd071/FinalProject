@@ -9,7 +9,7 @@ def check_if_go_out_of_array(coords, array_size):
 
 class Coastline:
     shifts = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-    finish_point = (3, 3)
+    finish_point = (-3, -3)
 
     # TODO: check if algo depends on bypass direction (shifts order)
     # TODO: replace tuples array by numpy array
@@ -45,6 +45,7 @@ class Coastline:
         for i, j in self.shifts:
             next_coord = y + i, x + j
             if not check_if_go_out_of_array(next_coord, self.data_size):
+                print()
                 if not self.check_if_came_back(next_coord) and \
                         self.data[y + i][x + j] == 0 and \
                         self.check_if_point_is_border(coord=next_coord):
