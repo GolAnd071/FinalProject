@@ -1,9 +1,9 @@
 import unittest
 from random import randint
-import choosing_coastline as cc
+import Algorithm as cc
 
 
-class Test_choosing_coastline(unittest.TestCase):
+class Test_algorithm(unittest.TestCase):
     def setUp(self):
         def make_array(n):
             arr = []
@@ -25,11 +25,10 @@ class Test_choosing_coastline(unittest.TestCase):
             cstln = cc.Coastline((0, 0), 3, self.maps[i])
             print(i, ' Coastline created\n')
             print(i, ' Coastline line started crating')
-            cstln.create_line()
-            print('Coastline cords: ', cstln.coords)
+            print('Coastline cords: ', cstln.get_coastline())
             print(i, ' Coastline line created\n')
             print(i, ' BrokenLine started crating')
-            brln = cc.BrokenLine(randint(1, 3), cstln.coords)
+            brln = cc.BrokenLine(randint(1, 3), cstln.get_coastline())
             print(i, ' BrokenLine created\n')
             print(i, ' BrokenLine line started creating')
             brln.create_line()
@@ -45,11 +44,10 @@ class Test_choosing_coastline(unittest.TestCase):
             cstln = cc.Coastline((0, 0), 10, self.maps[i])
             print(i + 20, ' Coastline created\n')
             print(i + 20, ' Coastline line started crating')
-            cstln.create_line()
-            print('Coastline cords: ', cstln.coords)
+            print('Coastline cords: ', cstln.get_coastline())
             print(i + 20, ' Coastline line created\n')
             print(i + 20, ' BrokenLine started crating')
-            brln = cc.BrokenLine(randint(1, 10), cstln.coords)
+            brln = cc.BrokenLine(randint(1, 10), cstln.get_coastline())
             print(i + 20, ' BrokenLine created\n')
             print(i + 20, ' BrokenLine line started creating')
             brln.create_line()
