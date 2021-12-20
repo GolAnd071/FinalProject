@@ -45,7 +45,6 @@ class Coastline:
         for i, j in self.shifts:
             next_coord = y + i, x + j
             if not check_if_go_out_of_array(next_coord, self.data_size):
-                print()
                 if not self.check_if_came_back(next_coord) and \
                         self.data[y + i][x + j] == 0 and \
                         self.check_if_point_is_border(coord=next_coord):
@@ -78,14 +77,14 @@ class Coastline:
 
         return lines + new_lines
 
-    def get_coastline(self):
+    def create_coastline(self):
         max_len = 0
         mainline = None
         for line in self.create_lines():
             if len(line) >= max_len:
                 max_len = len(line)
                 mainline = line
-        return mainline
+        self.coords = mainline
 
 
 class BrokenLine:
@@ -100,11 +99,11 @@ class BrokenLine:
     def create_line(self):
         """ Creates a list of coordinates of vertices of broken line of coastline """
 
-        def get_dists_range(fist_point, second_point):
-            dists = [(fist_point[0] - second_point[0] - 0.5) ** 2 + (fist_point[1] - second_point[1] - 0.5) ** 2,
-                     (fist_point[0] - second_point[0] - 0.5) ** 2 + (fist_point[1] - second_point[1] + 0.5) ** 2,
-                     (fist_point[0] - second_point[0] + 0.5) ** 2 + (fist_point[1] - second_point[1] - 0.5) ** 2,
-                     (fist_point[0] - second_point[0] + 0.5) ** 2 + (fist_point[1] - second_point[1] + 0.5) ** 2]
+        def get_dists_range(first_point, second_point):
+            dists = [(first_point[0] - second_point[0] - 0.5) ** 2 + (first_point[1] - second_point[1] - 0.5) ** 2,
+                     (first_point[0] - second_point[0] - 0.5) ** 2 + (first_point[1] - second_point[1] + 0.5) ** 2,
+                     (first_point[0] - second_point[0] + 0.5) ** 2 + (first_point[1] - second_point[1] - 0.5) ** 2,
+                     (first_point[0] - second_point[0] + 0.5) ** 2 + (first_point[1] - second_point[1] + 0.5) ** 2]
             return min(dists), max(dists)
 
         def is_step_in_dist_range(first_point, second_point):
