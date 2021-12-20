@@ -37,7 +37,7 @@ class AlgorithmTests(unittest.TestCase):
         #     print(i, ' BrokenLine step: ', brln.step)
         #     print(i, ' BrokenLine lenght: ', brln.get_length(), '\n')
         #     print(i + 1, ' Coastline started crating')
-        #     self.coastlines.append(cstln)
+        #     self.coastlines.  append(cstln)
         #     self.brokenlines.append(brln)
         for i in range(20):
             self.maps.append(make_array(10))

@@ -1,5 +1,5 @@
 def check_if_go_out_of_array(coords, array_size):
-    """ Checking if we've reached array frames """
+    """ Checking if we've gone out array """
 
     for c in coords:
         if c > array_size - 1 or c < 0:
@@ -61,6 +61,7 @@ class Coastline:
         line is a list of coastline coordinates
         Remember: self.coords includes coordinates in all branches
         """
+        # if_lines_has_equal_length = all(len(l) == len(lines[0]) for l in lines)
 
         if lines is None:
             lines = [[self.start_point]]
@@ -69,9 +70,14 @@ class Coastline:
 
         for line in lines:
             new_coords = self.get_next_coords(curr_coord=line[-1])
-            for nc in new_coords:
-                if nc != self.finish_point:
-                    self.coords += [nc]
+            if self.finish_point in new_coords:  # if line has ended
+                if len(lines) == 1:  # if single line has ended (so main line is found)
+                    return [line]
+                else:  # if it's dead end
+                    return self.create_lines(lines.remove(line))
+            else:  # if no line has ended
+                for nc in new_coords:
+                    self.coords += [nc]  # save coordinates to prevent unwanted looping
                     new_line = line + [nc]
                     new_lines += self.create_lines([new_line])
 
