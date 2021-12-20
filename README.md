@@ -2,7 +2,7 @@
 
 Семестровый проект студентов первого курса Григорьевой Е.С., Головнёва А.С. и Дрибаса Р.В.
 
-![PyVersion](https://img.shields.io/badge/python-3.7%2B-brightgreen) ![PyVersion](https://img.shields.io/badge/pygame-2.0.0-green) [![GitHub license](https://img.shields.io/github/license/GolAnd071/FinalProject)](https://github.com/GolAnd071/FinalProject/blob/main/LICENSE)
+![PyVersion](https://img.shields.io/badge/python-3.7%2B-brightgreen) ![PyVersion](https://img.shields.io/badge/pygame-2.0.0-green)
 
 ## Описание программы
 
