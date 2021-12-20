@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter.filedialog import askdirectory, askopenfilename
+from tkinter.filedialog import askdirectory
 
 import pygame
 
