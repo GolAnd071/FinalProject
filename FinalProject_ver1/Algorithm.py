@@ -1,3 +1,5 @@
+import queue
+
 def check_if_go_out_of_array(coords, array_size):
     """ Checking if we've gone out array """
 
@@ -54,7 +56,7 @@ class Coastline:
         else:
             return [self.finish_point]
 
-    def create_lines(self, lines=None) -> list:
+    def start_choosing_line(self, lines=None) -> list:
         """
         Note: real coastline has branches with dead ends.
         create_lines makes lines with no branching
@@ -63,30 +65,32 @@ class Coastline:
         """
         # if_lines_has_equal_length = all(len(l) == len(lines[0]) for l in lines)
 
-        if lines is None:
-            lines = [[self.start_point]]
 
-        new_lines = []
+        lines = [[]]
+        i = 0
 
-        for line in lines:
-            new_coords = self.get_next_coords(curr_coord=line[-1])
-            if self.finish_point in new_coords:  # if line has ended
-                if len(lines) == 1:  # if single line has ended (so main line is found)
-                    return [line]
-                else:  # if it's dead end
-                    return self.create_lines(lines.remove(line))
-            else:  # if no line has ended
-                for nc in new_coords:
-                    self.coords += [nc]  # save coordinates to prevent unwanted looping
-                    new_line = line + [nc]
-                    new_lines += self.create_lines([new_line])
+        q = queue.LifoQueue()
+        q.put(self.start_point)
 
-        return lines + new_lines
+        while not q.empty():
+            current_coord = q.get()
+            self.coords.append(current_coord)
+            lines[i].append(current_coord)
+            next_coords = self.get_next_coords(current_coord)
+            if self.finish_point in next_coords:
+                i += 1
+            else:
+                for j in range(len(next_coords) - 1):
+                    lines.insert(i + j + 1, lines[i])
+                for coord in next_coords:
+                    q.put(coord)
+
+        return lines
 
     def create_coastline(self):
         max_len = 0
         mainline = None
-        for line in self.create_lines():
+        for line in self.start_choosing_line():
             if len(line) >= max_len:
                 max_len = len(line)
                 mainline = line
