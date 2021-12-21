@@ -70,11 +70,11 @@ class Coastline:
         lines = [[]]
         current_line = 0
 
-        queue = queue.LifoQueue()
-        queue.put(self.start_point)
+        coords_queue = queue.LifoQueue()
+        coords_queue.put(self.start_point)
 
-        while not queue.empty():
-            current_coord = queue.get()
+        while not coords_queue.empty():
+            current_coord = coords_queue.get()
             self.coords.append(current_coord)
             lines[current_line].append(current_coord)
             next_coords = self.get_next_coords(current_coord)
@@ -84,7 +84,7 @@ class Coastline:
                 for j in range(len(next_coords) - 1):
                     lines.insert(current_line + j + 1, lines[current_line])
                 for coord in next_coords:
-                    queue.put(coord)
+                    coords_queue.put(coord)
 
         return lines
 
