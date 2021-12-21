@@ -2,7 +2,7 @@
 
 Семестровый проект студентов первого курса Григорьевой Е.С., Головнёва А.С. и Дрибаса Р.В.
 
-![PyVersion](https://img.shields.io/badge/python-3.7%2B-brightgreen) ![PyVersion](https://img.shields.io/badge/pygame-2.0.0-green)
+![PyVersion](https://img.shields.io/badge/python-3.7%2B-brightgreen) ![PyVersion](https://img.shields.io/badge/pygame-2.0%2B-brightgreen) ![PyVersion](https://img.shields.io/badge/waterdetect-1.5.11-brightgreen) ![PyVersion](https://img.shields.io/badge/tkinter-8.5-brightgreen)
 
 ## Описание программы
 
