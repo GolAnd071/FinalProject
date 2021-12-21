@@ -105,11 +105,11 @@ class Main():
             self.matrix[i][j] = (255, 0, 0)
 
         im = Image.fromarray(np.uint8(self.matrix))
-        im.save('image1.png')
+        im.save('image.png')
 
         self.length.set(str(self.brkln.get_length()))
         surf = pygame.Surface((10980, 10980))
-        img = pygame.image.load('image1.png')
+        img = pygame.image.load('image.png')
 
         img_rect = img.get_rect(bottomright=(10980, 10980))
         surf.blit(img, img_rect)
