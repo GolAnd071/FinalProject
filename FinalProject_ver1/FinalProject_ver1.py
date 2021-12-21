@@ -1,10 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter.filedialog import askdirectory
+from tkinter.filedialog import askdirectory, askopenfilename
 
 import pygame
 
 from PIL import Image
+import PyPDF2
 import numpy as np
 
 import waterdetect
@@ -32,6 +33,7 @@ class Main():
         self.prod_type = tk.StringVar()
         self.step = tk.StringVar()
         self.length = tk.StringVar()
+        self.image_dir = tk.StringVar()
 
         # Tkinter vidgets creation
         ttk.Combobox(self.frame, textvariable=self.mode, 
@@ -94,25 +96,44 @@ class Main():
         self.brkln.create_line()
         print('Message: Braking line ended.')
 
+    def get_image(self):
+        """ Getting image from output directory """
+
+        with open(self.image_dir.get(), 'rb') as pdf_file: 
+            pdf_reader = PyPDF2.PdfFileReader(pdf_file) 
+            page0 = pdf_reader.getPage(0) 
+            if '/XObject' in page0['/Resources']: 
+                xObject = page0['/Resources']['/XObject'].getObject() 
+                for obj in xObject: 
+                    if xObject[obj]['/Subtype'] == '/Image': 
+                        size = (xObject[obj]['/Width'], xObject[obj]['/Height']) 
+                        data = xObject[obj].getData() 
+                        if xObject[obj]['/ColorSpace'] == '/DeviceRGB': 
+                            mode = 'RGB' 
+                        else: 
+                            mode = 'P' 
+                        if '/Filter' in xObject[obj]: 
+                            img = Image.frombytes(mode, size, data) 
+                            img.save('image.png') 
+            else: 
+                print('No image found.')
+
     def render_image(self):
         """ Rendering final image """
 
         print('Message: Rendering started.')
-        self.matrix = [[(0, (1 - abs(self.water_map.water_mask[i][j])) * 255, 
-            abs(self.water_map.water_mask[i][j]) * 255) for j in range(10980)] for i in range(10980)]
 
-        for i, j in self.cstln.coords:
-            self.matrix[i][j] = (255, 0, 0)
-
-        im = Image.fromarray(np.uint8(self.matrix))
-        im.save('image.png')
+        self.image_dir.set(askopenfilename())
+        self.get_image()
 
         self.length.set(str(self.brkln.get_length()))
-        surf = pygame.Surface((10980, 10980))
+        surf = pygame.Surface((1000, 1000))
         img = pygame.image.load('image.png')
 
-        img_rect = img.get_rect(bottomright=(10980, 10980))
+        img_rect = img.get_rect(bottomright=(1000, 1000))
         surf.blit(img, img_rect)
+        surf = pygame.transform.scale(surf, (10980, 10980))
+
         if self.brkln.island:
             rng = range(len(self.brkln.vertices))
         else:
