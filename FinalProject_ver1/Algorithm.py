@@ -3,8 +3,8 @@ import queue
 def check_if_go_out_of_array(coords, array_size):
     """ Checking if we've gone out array """
 
-    for c in coords:
-        if c > array_size - 1 or c < 0:
+    for coord in coords:
+        if coord > array_size - 1 or coord < 0:
             return True
     return False
 
@@ -24,6 +24,7 @@ class Coastline:
 
     def check_if_point_is_border(self, coord: tuple):
         """ Checking if there are water bordering pixels in area """
+
         data = self.data
         y, x = coord
         for i in range(-1, 2):
@@ -36,6 +37,7 @@ class Coastline:
 
     def check_if_came_back(self, new_coord):
         """ Checking if we were here (in any line) """
+
         if new_coord in self.coords:
             return True
         else:
@@ -56,7 +58,7 @@ class Coastline:
         else:
             return [self.finish_point]
 
-    def start_choosing_line(self, lines=None) -> list:
+    def choose_lines(self, lines=None) -> list:
         """
         Note: real coastline has branches with dead ends.
         create_lines makes lines with no branching
@@ -65,32 +67,31 @@ class Coastline:
         """
         # if_lines_has_equal_length = all(len(l) == len(lines[0]) for l in lines)
 
-
         lines = [[]]
-        i = 0
+        current_line = 0
 
-        q = queue.LifoQueue()
-        q.put(self.start_point)
+        queue = queue.LifoQueue()
+        queue.put(self.start_point)
 
-        while not q.empty():
-            current_coord = q.get()
+        while not queue.empty():
+            current_coord = queue.get()
             self.coords.append(current_coord)
-            lines[i].append(current_coord)
+            lines[current_line].append(current_coord)
             next_coords = self.get_next_coords(current_coord)
             if self.finish_point in next_coords:
-                i += 1
+                current_line += 1
             else:
                 for j in range(len(next_coords) - 1):
-                    lines.insert(i + j + 1, lines[i])
+                    lines.insert(current_line + j + 1, lines[current_line])
                 for coord in next_coords:
-                    q.put(coord)
+                    queue.put(coord)
 
         return lines
 
     def create_coastline(self):
         max_len = 0
         mainline = None
-        for line in self.start_choosing_line():
+        for line in self.choose_lines():
             if len(line) >= max_len:
                 max_len = len(line)
                 mainline = line
@@ -131,6 +132,7 @@ class BrokenLine:
 
     def get_length(self):
         """ Returns length of broken line """
+
         if self.line_created:
             if self.island:
                 return self.step * len(self.vertices)
