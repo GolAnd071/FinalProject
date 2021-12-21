@@ -70,7 +70,7 @@ class Main():
                  sp = (0, i)
                  break
         self.cstln = Algorithm.Coastline(sp, 10980, self.water_map.water_mask)
-        self.cstln.get_coastline()
+        self.cstln.create_coastline()
         print('Message: Choosing coastline ended.')
 
     def brake_line(self):

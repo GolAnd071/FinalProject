@@ -1,5 +1,5 @@
 def check_if_go_out_of_array(coords, array_size):
-    """ Checking if we've reached array frames """
+    """ Checking if we've gone out array """
 
     for c in coords:
         if c > array_size - 1 or c < 0:
@@ -45,7 +45,6 @@ class Coastline:
         for i, j in self.shifts:
             next_coord = y + i, x + j
             if not check_if_go_out_of_array(next_coord, self.data_size):
-                print()
                 if not self.check_if_came_back(next_coord) and \
                         self.data[y + i][x + j] == 0 and \
                         self.check_if_point_is_border(coord=next_coord):
@@ -62,6 +61,7 @@ class Coastline:
         line is a list of coastline coordinates
         Remember: self.coords includes coordinates in all branches
         """
+        # if_lines_has_equal_length = all(len(l) == len(lines[0]) for l in lines)
 
         if lines is None:
             lines = [[self.start_point]]
@@ -70,22 +70,27 @@ class Coastline:
 
         for line in lines:
             new_coords = self.get_next_coords(curr_coord=line[-1])
-            for nc in new_coords:
-                if nc != self.finish_point:
-                    self.coords += [nc]
+            if self.finish_point in new_coords:  # if line has ended
+                if len(lines) == 1:  # if single line has ended (so main line is found)
+                    return [line]
+                else:  # if it's dead end
+                    return self.create_lines(lines.remove(line))
+            else:  # if no line has ended
+                for nc in new_coords:
+                    self.coords += [nc]  # save coordinates to prevent unwanted looping
                     new_line = line + [nc]
                     new_lines += self.create_lines([new_line])
 
         return lines + new_lines
 
-    def get_coastline(self):
+    def create_coastline(self):
         max_len = 0
         mainline = None
         for line in self.create_lines():
             if len(line) >= max_len:
                 max_len = len(line)
                 mainline = line
-        return mainline
+        self.coords = mainline
 
 
 class BrokenLine:
@@ -100,11 +105,11 @@ class BrokenLine:
     def create_line(self):
         """ Creates a list of coordinates of vertices of broken line of coastline """
 
-        def get_dists_range(fist_point, second_point):
-            dists = [(fist_point[0] - second_point[0] - 0.5) ** 2 + (fist_point[1] - second_point[1] - 0.5) ** 2,
-                     (fist_point[0] - second_point[0] - 0.5) ** 2 + (fist_point[1] - second_point[1] + 0.5) ** 2,
-                     (fist_point[0] - second_point[0] + 0.5) ** 2 + (fist_point[1] - second_point[1] - 0.5) ** 2,
-                     (fist_point[0] - second_point[0] + 0.5) ** 2 + (fist_point[1] - second_point[1] + 0.5) ** 2]
+        def get_dists_range(first_point, second_point):
+            dists = [(first_point[0] - second_point[0] - 0.5) ** 2 + (first_point[1] - second_point[1] - 0.5) ** 2,
+                     (first_point[0] - second_point[0] - 0.5) ** 2 + (first_point[1] - second_point[1] + 0.5) ** 2,
+                     (first_point[0] - second_point[0] + 0.5) ** 2 + (first_point[1] - second_point[1] - 0.5) ** 2,
+                     (first_point[0] - second_point[0] + 0.5) ** 2 + (first_point[1] - second_point[1] + 0.5) ** 2]
             return min(dists), max(dists)
 
         def is_step_in_dist_range(first_point, second_point):
