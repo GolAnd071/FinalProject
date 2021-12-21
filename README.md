@@ -14,9 +14,8 @@
     1. Установите Python с [этого](https://www.python.org/downloads/) сайта.
     2. Также проверьте наличие библиотек `tkinter`, `pygame` и `waterdetect`. В случае её отсутствия выполните в терминале следующую команду:
     ```
-   pip install tkinter
-   pip install pygame
-   pip install waterdetect
+   pip install -r requirements_pip.txt
+   conda install --file requirements_conda.txt
     ```
 2. Склонируйте репозиторий к себе на компьютер. Для этого выполните в терминале:
 ```

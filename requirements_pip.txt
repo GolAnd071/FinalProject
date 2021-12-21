@@ -1,0 +1,10 @@
+pygame
+numpy
+waterdetect
+lxml
+packaging
+scikit_learn
+matplotlib
+PyPDF2
+scikit-image
+pillow
