@@ -31,6 +31,7 @@ class Main():
         self.out_dir = tk.StringVar()
         self.prod_type = tk.StringVar()
         self.step = tk.StringVar()
+        self.length = tk.StringVar()
 
         # Tkinter vidgets creation
         ttk.Combobox(self.frame, textvariable=self.mode, values=['Batch', 'Single']).grid(column=0, row=2)
@@ -44,6 +45,7 @@ class Main():
         ttk.Button(self.frame, text='Choose coastline', command=lambda: self.choose_coastline()).grid(column=0, row=3)
         ttk.Entry(self.frame, textvariable=self.step).grid(column=1, row=3)
         ttk.Button(self.frame, text='Make broken line', command=lambda: self.brake_line()).grid(column=2, row=3)
+        ttk.Label(self.frame, textvariable=self.length, width=16).grid(column=1, row=4)
 
         # Main loop
         self.root.mainloop()
@@ -86,11 +88,12 @@ class Main():
         self.matrix = [[(0, (1 - abs(self.water_map.water_mask[i][j])) * 255, abs(self.water_map.water_mask[i][j]) * 255) for j in range(10980)] for i in range(10980)]
 
         for i, j in self.cstln.coords:
-            self.matrix[i][j] = (255, 0, 0)
+            #self.matrix[i][j] = (255, 0, 0)
 
         im = Image.fromarray(np.uint8(self.matrix))
         im.save('image1.png')
 
+        self.length.set(str(self.brkln.get_length()))
         surf = pygame.Surface((10980, 10980))
         img = pygame.image.load('image1.png')
 
@@ -101,7 +104,7 @@ class Main():
         else:
             rng = range(1, len(self.brkln.vertices))
         for i in rng:
-            pygame.draw.line(surf, (255, 255, 0), (self.brkln.vertices[i-1][1], self.brkln.vertices[i-1][0]), (self.brkln.vertices[i][1], self.brkln.vertices[i][0]), width=50)
+            pygame.draw.line(surf, (255, 0, 0), (self.brkln.vertices[i-1][1], self.brkln.vertices[i-1][0]), (self.brkln.vertices[i][1], self.brkln.vertices[i][0]), width=50)
         surf = pygame.transform.scale(surf, (self.screen.get_width(), self.screen.get_height()))
         self.screen.blit(surf, (0, 0))
         pygame.display.update()
