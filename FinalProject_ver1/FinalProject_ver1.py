@@ -11,7 +11,6 @@ import waterdetect
 
 import Algorithm
 
-
 class Main():
     def __init__(self):
         ''' Entry point of the programm '''
@@ -71,7 +70,7 @@ class Main():
                  sp = (0, i)
                  break
         self.cstln = Algorithm.Coastline(sp, 10980, self.water_map.water_mask)
-        self.cstln.create_line()
+        self.cstln.get_coastline()
         print('Message: Choosing coastline ended.')
 
     def brake_line(self):
